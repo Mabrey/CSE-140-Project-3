@@ -9,9 +9,9 @@ void loopUnroll(int m, int n, float *A, float *C)
                 //to start untolling the loop, we need to know how far we can unroll it. 
                 //since we are in the j loop, we should unroll the j loop by 5 or less? 
                 //m is our row/column length so distToColumnEnd will be our boundry for unrolling to prevent reading the next row.
-                int distToColumnEnd = m - j;
+                int distToStripEnd = m - j;
 
-                if (distToColumnEnd > 4)    //unroll 5 times
+                if (distToStripEnd > 4)    //unroll 5 times
                 {
                     C[i+j*m] += A[i+k*m] * A[j+k*m];
                     C[i+(j + 1)*m] += A[i+k*m] * A[(j + 1)+k*m];
@@ -20,7 +20,7 @@ void loopUnroll(int m, int n, float *A, float *C)
                     C[i+(j + 4)*m] += A[i+k*m] * A[(j + 4)+k*m];
                 }
 
-                else if (distToColumnEnd == 4)   //unroll 4 times
+                else if (distToStripEnd == 4)   //unroll 4 times
                 {
                     C[i+j*m] += A[i+k*m] * A[j+k*m];
                     C[i+(j + 1)*m] += A[i+k*m] * A[(j + 1)+k*m];
@@ -28,14 +28,14 @@ void loopUnroll(int m, int n, float *A, float *C)
                     C[i+(j + 3)*m] += A[i+k*m] * A[(j + 3)+k*m];
                 }
                 
-                else if (distToColumnEnd == 3) //unroll 3 times
+                else if (distToStripEnd == 3) //unroll 3 times
                 {
                     C[i+j*m] += A[i+k*m] * A[j+k*m];
                     C[i+(j + 1)*m] += A[i+k*m] * A[(j + 1)+k*m];
                     C[i+(j + 2)*m] += A[i+k*m] * A[(j + 2)+k*m];
                 } 
 
-                else if (distToColumnEnd == 2)   //unroll 2 times
+                else if (distToStripEnd == 2)   //unroll 2 times
                 {
                     C[i+j*m] += A[i+k*m] * A[j+k*m];
                     C[i+(j + 1)*m] += A[i+k*m] * A[(j + 1)+k*m];
@@ -57,10 +57,10 @@ void loopUnrollWithSwitch(int m, int n, float *A, float *C)
                 //to start untolling the loop, we need to know how far we can unroll it. 
                 //since we are in the j loop, we should unroll the j loop by 5 or less? 
                 //m is our row/column length so distToColumnEnd will be our boundry for unrolling to prevent reading the next row.
-                int distToColumnEnd = m - j;
-                if (distToColumnEnd > 4) distToColumnEnd = 5;
+                int distToStripEnd = m - j;
+                if (distToStripEnd > 4) distToStripEnd = 5;
                     
-                switch (distToColumnEnd){
+                switch (distToStripEnd){
                     case 5:
                         C[i+(j + 4)*m] += A[i+k*m] * A[(j + 4)+k*m];
 
