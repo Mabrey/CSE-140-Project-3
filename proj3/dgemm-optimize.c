@@ -197,16 +197,98 @@ void reorderingWithUnroll(int m, int n, float *A, float *C){
 
 }
 
+void matrixPad(int m, int n, float *A, float *C) {
+
+	if (m > n) {
+
+		//make rows = columns so we operate on square matrix
+		int newN = m;
+		//allocate new memory for padded matrix
+		float *paddedA = (float*)malloc(m * newN * sizeof(float));
+
+		//initialize matrix to 0
+		for (int i = 0; i < m; i++) {
+			for (int k = 0; k < newN; k++) {
+
+				paddedA[i + k * m] = 0;
+
+			}
+		}
+
+		//copy original matrix to padded matrix
+		for (int i = 0; i < m; i++) {
+			for (int k = 0; k < n; k++) {
+
+				paddedA[i + k * m] = A[i + k * m];
+				//printf("Padded Matrix Value: %f", A[i + k * m]);
+			}
+		}
+
+		//multiply
+		for (int i = 0; i < m; i++)
+			for (int k = 0; k < newN; k++)
+				for (int j = 0; j < m; j++)
+					C[i + j * m] += paddedA[i + k * m] * paddedA[j + k * m];
+	}
+
+	else if (n > m) {
+
+		//make colomns = rows so we operate on square matrix
+		int newM = n;
+		int dif = n - m;
+		int offset = 0;
+
+		//allocate new memory for padded matrix
+		float *paddedA = (float*)malloc(newM * n * sizeof(float));
+
+		for (int i = 0; i < newM; i++) {
+			for (int k = 0; k < n; k++) {
+
+				paddedA[i + k * newM] = 0;
+
+			}
+		}
+
+		for (int i = 0; i < m; i++) {
+
+			offset = i * dif;
+
+			for (int k = 0; k < n; k++) {
+
+				paddedA[i + k * m + offset] = A[i + k * m];
+				//printf("Padded Matrix Value: %f", A[i + k * m]);
+
+			}
+		}
+
+		//multiply
+		for (int i = 0; i < newM; i++)
+			for (int k = 0; k < n; k++)
+				for (int j = 0; j < newM; j++)
+					C[i + j * m] += paddedA[i + k * m] * paddedA[j + k * m];
+
+	}
+
+	else {
+
+		//multiply
+		for (int i = 0; i < m; i++)
+			for (int k = 0; k < n; k++)
+				for (int j = 0; j < m; j++)
+					C[i + j * m] += A[i + k * m] * A[j + k * m];
+	}
+
+}
 
 
 void dgemm( int m, int n, float *A, float *C )
 {
     
-    loopUnroll(m, n, A, C);
+    //loopUnroll(m, n, A, C);
     //loopUnrollWithSwitch(m, n, A, C);
     //reordering(m, n, A, C);
     //reorderingWithUnroll(m, n, A, C);
-    
+	matrixPad(m, n, A, C);
    
 
 }
