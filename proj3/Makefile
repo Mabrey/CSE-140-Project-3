@@ -1,6 +1,6 @@
 CC = gcc -std=gnu99
 
-CFLAGS = -msse4 -O3 -pipe -fno-omit-frame-pointer
+CFLAGS = -msse4 -O0 -pipe -fno-omit-frame-pointer
 
 all:	bench-naive bench-optimize
 
