@@ -241,7 +241,7 @@ void matrixPad(int m, int n, float *A, float *C) {
         int j = 0;
 		for (int i = 0; i < m * n; i++) {
 			if (i % m == 0)
-                j += offset;
+                j += dif;
             else 
             paddedA[j] = A[i];
             j++;
